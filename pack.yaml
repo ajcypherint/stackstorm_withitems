@@ -1,0 +1,9 @@
+---
+ref: CypherInt 
+name: CypherInt 
+description: faster with items
+version: 0.1.0
+author: Aaron Jonen
+email: aaron.jonen@cypherint.com
+python_versions:
+  - "3"
