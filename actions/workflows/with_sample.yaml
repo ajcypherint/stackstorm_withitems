@@ -1,0 +1,17 @@
+version: 1.0
+
+description: A with items example
+
+vars:
+	iterable: ["1", "2", "3"]
+tasks:
+  task1:
+    action: with.with_items
+    input:
+			action: core.cmd
+			parameters: "<% ctx().list_items.select({\"cmd\"=>concat(\"echo \", $)}) %>"
+    next:
+      - do: task2
+  task2:
+    action: core.noop
+
