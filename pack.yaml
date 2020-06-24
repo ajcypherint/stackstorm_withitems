@@ -1,6 +1,6 @@
 ---
-ref: CypherInt 
-name: CypherInt 
+ref: WithItems 
+name: WithItems 
 description: faster with items
 version: 0.1.0
 author: Aaron Jonen
