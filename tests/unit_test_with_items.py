@@ -1,6 +1,6 @@
 from st2test.base import BaseActionTestCase
 from st2client.commands import action as st2action
-from with_items import Process
+from with_items import WithItemsAction
 import mock
 
 def mock_sleep(time):
@@ -51,7 +51,7 @@ class MockClient(object):
 
 
 class WithItemsTestCase(BaseActionTestCase):
-    action_cls = Process
+    action_cls = WithItemsAction
     CONFIG = {
             "st2apiurl": "http://test/auth",
             "st2baseurl": "http://test/",
