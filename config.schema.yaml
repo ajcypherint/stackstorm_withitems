@@ -1,2 +1,4 @@
 ---
-dummy: 'text'
+  dummy:
+    type: "string"
+    required: false
