@@ -20,6 +20,16 @@ class WithItemsAction(Action):
         super(Process, self).__init__(config)
         self.jinja_env = jinja2.Environment()
         self.jinja_pattern = re.compile(JINJA_REGEXP)
+        self.api_key = self.config.get("st2api_key", None)
+
+        if self.api_key is not None:
+            if os.environ.get("ST2_AUTH_TOKEN", None) is not None:
+                del os.environ["ST2_AUTH_TOKEN"]
+        self.client = Client(base_url=config["st2baseurl"],
+                auth_url=config["st2authurl"]
+                api_key=self.api_key,
+                api_url=config["st2apiurl"]
+                )
 
     def unescape_jinja(self, expr):
         if isinstance(expr, six.string_types):
@@ -87,10 +97,6 @@ class WithItemsAction(Action):
         if result_expr:
             result_expr = self.unescape_jinja(result_expr)
 
-        # rate limit
-        client = Client(base_url=self.config["st2baseurl"],
-                        auth_url=self.config["st2authurl"],
-                        api_url=self.config["st2apiurl"])
         running_ids = []
         finished = []
         param_index = 0
@@ -100,7 +106,7 @@ class WithItemsAction(Action):
             while len(running_ids) < paging_limit and \
                     len(parameters) != len(running_ids) + len(finished) : # end of list no more to page
                 self.logger.debug("creating action index: " + str(param_index))
-                execution = client.executions.create(
+                execution = self.client.executions.create(
                     LiveAction(action=action,
                                parameters=parameters[param_index]))
                 running_ids.append(execution.id)
@@ -110,7 +116,7 @@ class WithItemsAction(Action):
             time.sleep(sleep_time)
 
             # check for completed or failures
-            execution_list = client.liveactions.query(id=",".join(running_ids))
+            execution_list = self.client.liveactions.query(id=",".join(running_ids))
             for e_updated in execution_list:
                 if e_updated.status in st2action.LIVEACTION_COMPLETED_STATES:
                     if e_updated.status != st2action.LIVEACTION_STATUS_SUCCEEDED:
