@@ -19,11 +19,26 @@ class LiveActions(object):
         self.actions = {}
         self.action_id_counter = 0
         self.actions_seen = {}
+    def query(self, id):
+        """
+        :param ids: list[str]
+        """
+        ids = [i for i in id.split(",")]
+        results = []
+        for id in ids:
+            if self.actions_seen.get(id, False) == True:
+                self.actions[id].status = st2action.LIVEACTION_STATUS_SUCCEEDED
+                results.append(self.actions[id])
+            if self.actions[id].status == st2action.LIVEACTION_STATUS_RUNNING:
+                self.actions_seen[id] = True
+                results.append(self.actions[id])
+        return results
     def create(self, *args, **kwargs):
         action = ActionMockStatus(self.action_id_counter,
                 st2action.LIVEACTION_STATUS_RUNNING)
         self.action_id_counter += 1
         self.actions[action.id] = action
+        return action
 
 
 class MockClient(object):
