@@ -2,16 +2,18 @@ version: 1.0
 
 description: A with items example
 
-vars:
-	iterable: ["1", "2", "3"]
+input:
+  - list_items
+
 tasks:
   task1:
-    action: with.with_items
+    action: withitems.with_items
     input:
-			action: core.cmd
-			parameters: "<% ctx().list_items.select({\"cmd\"=>concat(\"echo \", $)}) %>"
+      action: core.echo
+      parameters: "<% ctx().list_items.select({\"message\"=>concat(\"message \", $)}) %>"
     next:
-      - do: task2
+      - when: <% succeeded() %>
+        do: task2
   task2:
     action: core.noop
 
