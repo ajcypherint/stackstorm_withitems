@@ -1,11 +1,10 @@
-from st2test.base import BaseActionTestCase
+from st2tests.base import BaseActionTestCase
 from st2client.commands import action as st2action
 from with_items import WithItemsAction
 import mock
 
 def mock_sleep(time):
     pass
-
 
 class ActionMockStatus(object):
     def __init__(self, id, status):
@@ -20,19 +19,6 @@ class LiveActions(object):
         self.actions = {}
         self.action_id_counter = 0
         self.actions_seen = {}
-
-    def query(self, inid):
-        ids = [i for i in inid.split(",")]
-        results = []
-        for id in ids:
-            if self.actions_seen.get(id, False) == True:
-                self.actions[id].status = st2action.LIVEACTION_STATUS_SUCCEEDED
-                results.append(self.actions[id])
-            if self.actions[id].status == st2actions.LIVEACTION_STATUS_RUNNING:
-                self.actions_seen[id]=True
-                results.append(self.actions[id])
-        return results
-
     def create(self, *args, **kwargs):
         action = ActionMockStatus(self.action_id_counter,
                 st2action.LIVEACTION_STATUS_RUNNING)
@@ -71,8 +57,8 @@ class WithItemsTestCase(BaseActionTestCase):
         self.assertEquals("{{ xxx }}", res)
 
     def test_action_with_items_render_jinja(self):
-        mock_result = {"test":1, "test2",2}
-        result_context = {"_":"result": mock_result}}
+        mock_result = {"test":1, "test2":2}
+        result_context = {"_":{"result": mock_result}}
         action = self.get_action_instance(config=WithItemsTestCase.CONFIG)
         res = action.render_jinja(result_context,
                 action.unescape_jinja_str("{_{ _.result.test2 }_}"))

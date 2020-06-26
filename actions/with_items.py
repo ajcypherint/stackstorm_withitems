@@ -1,6 +1,7 @@
 import copy
 import jinja2
 import re
+import os
 import six
 import time
 import urllib3
@@ -17,7 +18,7 @@ JINJA_REGEXP = '({{(.*?)}})'
 class WithItemsAction(Action):
 
     def __init__(self, config):
-        super(Process, self).__init__(config)
+        super(WithItemsAction, self).__init__(config)
         self.jinja_env = jinja2.Environment()
         self.jinja_pattern = re.compile(JINJA_REGEXP)
         self.api_key = self.config.get("st2api_key", None)
@@ -26,7 +27,7 @@ class WithItemsAction(Action):
             if os.environ.get("ST2_AUTH_TOKEN", None) is not None:
                 del os.environ["ST2_AUTH_TOKEN"]
         self.client = Client(base_url=config["st2baseurl"],
-                auth_url=config["st2authurl"]
+                auth_url=config["st2authurl"],
                 api_key=self.api_key,
                 api_url=config["st2apiurl"]
                 )
