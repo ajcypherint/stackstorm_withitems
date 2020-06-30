@@ -58,3 +58,4 @@ with_items will be used inside a workflow.  Here is an example of that. The YAQL
             do: task2
       task2:
         action: core.noop
+```
