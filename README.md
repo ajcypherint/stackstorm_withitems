@@ -36,7 +36,7 @@ st2baseurl: https://localhost:443
 * `withitems.with_items`
 
 
-### Action workflow Example - with.with_items
+### Action workflow Example - withitems.with_items
 with_items will be used inside a workflow.  Here is an example of that. The YAQL select function is very handy to format a list of objects to pass as a parameter.
 ``` shell
 ---    
