@@ -33,7 +33,7 @@ st2baseurl: https://localhost:443
 
 ## Actions
 
-* `with.with_items`
+* `withitems.with_items`
 
 
 ### Action workflow Example - with.with_items
